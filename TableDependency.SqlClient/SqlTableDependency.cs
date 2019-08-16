@@ -138,7 +138,8 @@ namespace TableDependency.SqlClient
             ITableDependencyFilter filter = null,
             DmlTriggerType notifyOn = DmlTriggerType.All,
             bool executeUserPermissionCheck = true,
-            bool includeOldValues = false) : base(connectionString, tableName, schemaName, mapper, updateOf, filter, notifyOn, executeUserPermissionCheck)
+            bool includeOldValues = false,
+            Guid? triggerGuidName = null) : base(connectionString, tableName, schemaName, mapper, updateOf, filter, notifyOn, executeUserPermissionCheck, triggerGuidName)
         {
             this.IncludeOldValues = includeOldValues;
         }
@@ -339,7 +340,7 @@ namespace TableDependency.SqlClient
         protected override string GetBaseObjectsNamingConvention()
         {
             var name = $"{_schemaName}_{_tableName}";
-            return $"{name}_{Guid.NewGuid()}";
+            return $"{name}_{_guid}";
         }
 
         protected override void DropDatabaseObjects()

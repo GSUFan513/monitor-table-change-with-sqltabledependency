@@ -66,6 +66,7 @@ namespace TableDependency.SqlClient.Base
         protected bool _disposed;
         protected string _dataBaseObjectsNamingConvention;
         protected bool _databaseObjectsCreated;
+        protected Guid _guid;
 
         #endregion
 
@@ -171,7 +172,8 @@ namespace TableDependency.SqlClient.Base
             IUpdateOfModel<T> updateOf = null,
             ITableDependencyFilter filter = null,
             DmlTriggerType dmlTriggerType = DmlTriggerType.All,
-            bool executeUserPermissionCheck = true)
+            bool executeUserPermissionCheck = true,
+            Guid? triggerGuidName = null)
         {
             if (mapper?.Count() == 0) throw new UpdateOfException("mapper parameter is empty.");
             if (updateOf?.Count() == 0) throw new UpdateOfException("updateOf parameter is empty.");
@@ -204,6 +206,11 @@ namespace TableDependency.SqlClient.Base
             _dataBaseObjectsNamingConvention = this.GetBaseObjectsNamingConvention();
             _dmlTriggerType = dmlTriggerType;
             _filter = filter;
+
+            if (triggerGuidName.HasValue)
+                _guid = triggerGuidName.Value;
+            else
+                _guid = Guid.NewGuid();
         }
 
         #endregion
